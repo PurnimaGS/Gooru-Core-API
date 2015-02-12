@@ -240,6 +240,14 @@ public class ResourceRestV2Controller extends BaseController implements Constant
 		return toModelAndViewWithIoFilter(this.getResourceService().checkResourceUrlExists(url,checkShortenedUrl), RESPONSE_FORMAT_JSON,EXCLUDE_ALL, true, RESOURCE_INSTANCE_INCLUDES);
 	}
 
+	@AuthorizeOperations(operations = { GooruOperationConstants.OPERATION_RESOURCE_READ })
+	@RequestMapping(method = RequestMethod.GET, value = "/attribution")
+	public ModelAndView getResourceSourceAttribution(@RequestParam(value = OFFSET_FIELD, required = false, defaultValue = "0") Integer offset, @RequestParam(value = LIMIT_FIELD, required = false, defaultValue = "10") Integer limit,
+			@RequestParam(value = ATTRIBUTION, required = false) String attribution, @RequestParam(value = DOMAIN_NAME, required = false) String domainName, @RequestParam(value = SOURCE_NAME, required = false) String sourceName,
+			@RequestParam(value = TYPE, required = false, defaultValue = NORMAL_DOMAIN) String type) throws Exception {
+		return toModelAndViewWithIoFilter(this.getResourceService().getResouceSourceAttribution(domainName, sourceName, attribution, type, offset, limit), RESPONSE_FORMAT_JSON, EXCLUDE_ALL, true, RESOURCE_SOURCE_INCLUDES);
+	}
+
 	private Resource buildResourceFromInputParameters(String data) {
 		return JsonDeserializer.deserialize(data, Resource.class);
 	}

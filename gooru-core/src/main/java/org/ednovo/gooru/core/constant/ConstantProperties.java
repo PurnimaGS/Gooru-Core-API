@@ -437,6 +437,8 @@ public interface ConstantProperties {
 	
 	static final String USER_GROUP_INCLUDES[] = { "*.groupName","*.groupCode","*.userGroupType"};
 	
+	static final String RESOURCE_SOURCE_INCLUDES[] = {"*.attribution","*.domainName","*.sourceName","*.activeStatus","*.resourceSourceId","*.frameBreaker","*.isBlacklisted","*.protocolSupported","*.hasHttpsSupport","*.totalHitCount", "*.searchResults"};
+	
 	public static final String WEBPURIFY_API_KEY = "2b9dbbde0e50edf204a6e742cfdd79bc";
 
 	public static final String WEBPURIFY_CONFIG_KEY = "webpurify.com.api.key";

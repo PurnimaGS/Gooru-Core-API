@@ -52,6 +52,7 @@ import org.ednovo.gooru.core.api.model.SessionContextSupport;
 import org.ednovo.gooru.core.api.model.Textbook;
 import org.ednovo.gooru.core.api.model.User;
 import org.ednovo.gooru.core.cassandra.model.ResourceMetadataCo;
+import org.ednovo.gooru.core.constant.ConstantProperties;
 import org.ednovo.gooru.core.constant.ParameterProperties;
 import org.ednovo.gooru.domain.service.resource.ResourceServiceImpl;
 import org.ednovo.gooru.infrastructure.persistence.hibernate.BaseRepositoryHibernate;
@@ -70,7 +71,7 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class ResourceRepositoryHibernate extends BaseRepositoryHibernate implements ResourceRepository,ParameterProperties {
+public class ResourceRepositoryHibernate extends BaseRepositoryHibernate implements ResourceRepository,ParameterProperties,ConstantProperties {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
@@ -549,6 +550,73 @@ public class ResourceRepositoryHibernate extends BaseRepositoryHibernate impleme
 		rsMap.put("filteredResourcSource", criteria.list());
 		return rsMap;
 	}
+	
+	@Override
+	public List<ResourceSource> getAttributions(String domainName, String sourceName, String attribution, String type, Integer offset, Integer limit) {
+		String hql = "FROM ResourceSource rs";
+		if (type != null) {
+			hql += " WHERE rs.type =:type";
+		}
+		if (domainName != null) {
+			hql += " AND rs.domainName Like :domainName";
+		}
+		if (sourceName != null) {
+			hql += " AND rs.sourceName =:sourceName";
+		}
+		if (attribution != null) {
+			hql += " AND rs.attribution Like :attribution";
+		}
+		
+		hql += " ORDER BY rs.resourceSourceId asc";
+		Query query = getSession().createQuery(hql);
+		if (domainName != null) {
+			query.setParameter("domainName", "%"+domainName+"%");
+		}
+		if (sourceName != null) {
+			query.setParameter("sourceName", sourceName);
+		}
+		if (attribution != null) {
+			query.setParameter("attribution", "%"+attribution+"%");
+		}
+		if (type != null) {
+			query.setParameter("type", type);
+		}
+		query.setFirstResult(offset);
+		query.setMaxResults(limit != null ? (limit > MAX_LIMIT ? MAX_LIMIT : limit) : LIMIT);
+		return (List<ResourceSource>) query.list();
+	}
+	@Override
+	public Long getAttributionCount(String domainName, String sourceName, String attribution, String type) {
+		String hql = "SELECT count(*) FROM ResourceSource rs";
+		if (type != null) {
+			hql += " WHERE rs.type =:type";
+		}
+		if (domainName != null) {
+			hql += " AND rs.domainName Like :domainName";
+		}
+		if (sourceName != null) {
+			hql += " AND rs.sourceName =:sourceName";
+		}
+		if (attribution != null) {
+			hql += " AND rs.attribution Like :attribution";
+		}
+		
+		Query query = getSession().createQuery(hql);
+		if (domainName != null) {
+			query.setParameter("domainName", "%"+domainName+"%");
+		}
+		if (sourceName != null) {
+			query.setParameter("sourceName", sourceName);
+		}
+		if (attribution != null) {
+			query.setParameter("attribution", "%"+attribution+"%");
+		}
+		if (type != null) {
+			query.setParameter("type", type);
+		}
+		return (Long) query.list().get(0);
+	}
+
 
 	@SuppressWarnings("unchecked")
 	@Override

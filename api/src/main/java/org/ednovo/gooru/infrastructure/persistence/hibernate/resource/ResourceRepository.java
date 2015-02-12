@@ -160,5 +160,9 @@ public interface ResourceRepository extends BaseRepository {
 	ResourceSummary getResourceSummaryById(String gooruOid);
 	
 	Integer getSubscriptionCountForGooruOid(String contentGooruOid);
+	
+	List<ResourceSource> getAttributions(String domainName, String sourceName, String attribution, String type, Integer offset, Integer limit);
+	
+	Long getAttributionCount(String domainName,String sourceName,String attribution,String type);
 
 }

@@ -46,6 +46,7 @@ import org.ednovo.gooru.core.api.model.UpdateViewsDTO;
 import org.ednovo.gooru.core.api.model.User;
 import org.ednovo.gooru.core.cassandra.model.ResourceMetadataCo;
 import org.ednovo.gooru.domain.service.BaseService;
+import org.ednovo.gooru.domain.service.search.SearchResults;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.validation.Errors;
@@ -224,6 +225,6 @@ public interface ResourceService extends BaseService {
 	
 	Resource setContentProvider(String gooruOid);
 	
-
+	SearchResults<ResourceSource> getResouceSourceAttribution(String domainName,String sourceName,String attribution,String type, Integer offset,Integer limit);
 
 }

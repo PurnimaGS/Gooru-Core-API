@@ -112,6 +112,7 @@ import org.ednovo.gooru.domain.service.CollectionService;
 import org.ednovo.gooru.domain.service.assessment.AssessmentService;
 import org.ednovo.gooru.domain.service.eventlogs.ResourceEventLog;
 import org.ednovo.gooru.domain.service.partner.CustomFieldsService;
+import org.ednovo.gooru.domain.service.search.SearchResults;
 import org.ednovo.gooru.domain.service.sessionActivity.SessionActivityService;
 import org.ednovo.gooru.domain.service.setting.SettingService;
 import org.ednovo.gooru.domain.service.storage.S3ResourceApiHandler;
@@ -3185,6 +3186,13 @@ public class ResourceServiceImpl extends OperationAuthorizer implements Resource
 		}
 	}
 	
+	@Override
+	public SearchResults<ResourceSource> getResouceSourceAttribution(String domainName, String sourceName, String attribution, String type, Integer offset, Integer limit) {
+		SearchResults<ResourceSource> result = new SearchResults<ResourceSource>();
+		result.setSearchResults(this.getResourceRepository().getAttributions(domainName, sourceName, attribution, type, offset, limit));
+		result.setTotalHitCount(this.getResourceRepository().getAttributionCount(domainName, sourceName, attribution, type));
+		return result;
+	}
 	public CollectionRepository getCollectionRepository() {
 		return collectionRepository;
 	}
